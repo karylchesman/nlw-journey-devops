@@ -26,13 +26,22 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Build docker image
-        working-directory: ./app-journey
-        run: docker build -t karylchesman/nlw-journey-devops:${{ steps.generate_sha.outputs.sha }} .
+      # - name: Build docker image
+      #   working-directory: ./app-journey
+      #   run: docker build -t karylchesman/nlw-journey-devops:${{ steps.generate_sha.outputs.sha }} .
 
-      - name: Push image
-        working-directory: ./app-journey
-        run: |
-          docker push karylchesman/nlw-journey-devops:${{ steps.generate_sha.outputs.sha }}
-          docker tag karylchesman/nlw-journey-devops:${{ steps.generate_sha.outputs.sha }} karylchesman/nlw-journey-devops:latest
-          docker push karylchesman/nlw-journey-devops:latest
+      # - name: Push image
+      #   working-directory: ./app-journey
+      #   run: |
+      #     docker push karylchesman/nlw-journey-devops:${{ steps.generate_sha.outputs.sha }}
+      #     docker tag karylchesman/nlw-journey-devops:${{ steps.generate_sha.outputs.sha }} karylchesman/nlw-journey-devops:latest
+      #     docker push karylchesman/nlw-journey-devops:latest
+
+      - name: Build and push
+        uses: docker/build-push-action@v6
+        with:
+          context: ./app-journey
+          push: true
+          tags: |
+            karylchesman/nlw-journey-devops:${{ steps.generate_sha.outputs.sha }}
+            karylchesman/nlw-journey-devops:latest
